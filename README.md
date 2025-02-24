@@ -5,7 +5,7 @@ Welcome to **Eyal's ATM**, a simple banking service implemented using FastAPI.
 ## Base URL
 
 ```
-https://eyals-atm.onrender.com/
+https://eyals-atm.onrender.com
 ```
 
 This API is currently deployed and accessible at: [ATM API](https://eyals-atm.onrender.com/).
