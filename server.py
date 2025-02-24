@@ -17,18 +17,14 @@ class Transaction(BaseModel):
 async def read_root():
     return {"message": "Welcome to the FastAPI application!"}
 
-@app.get("")
-async def read_root():
-    return {"message": "Welcome to the FastAPI application!"}
-
-@app.get("/balance/{account_id}")
+@app.get("/accounts/{account_id}/balance")
 def get_balance(account_id: str):
     """Returns the balance of a given account."""
     if account_id in accounts:
         return {"balance": accounts[account_id]["balance"]}
     raise HTTPException(status_code=400, detail="Invalid account")
 
-@app.post("/deposit/{account_id}")
+@app.post("/accounts/{account_id}/deposit")
 def deposit(account_id: str, transaction: Transaction):
     """Deposits money into the account."""
     if account_id in accounts:
@@ -36,7 +32,7 @@ def deposit(account_id: str, transaction: Transaction):
         return {"balance": accounts[account_id]["balance"]}
     raise HTTPException(status_code=400, detail="Account not found")
 
-@app.post("/withdraw/{account_id}")
+@app.post("/accounts/{account_id}/withdraw")
 def withdraw(account_id: str, transaction: Transaction):
     """Withdraws money from the account."""
     if account_id in accounts:
