@@ -46,20 +46,14 @@ https://eyals-atm.onrender.com/
 
 ## Design Decisions
 
-- **In-Memory Storage:** The application uses an in-memory dictionary to store account balances, meaning data resets on each server restart.
-- **Pydantic Validation:** The API enforces correct data input using Pydantic models.
-- **Automatic Account Creation:** Depositing into a nonexistent account initializes it with the deposited amount.
+1. **In-Memory Storage**: The application uses a simple dictionary to store account balances. This keeps the implementation lightweight but does not persist data across server restarts.
+2. **Pydantic Model for Transactions**: A `Transaction` model is used to enforce structured data input, ensuring that deposits and withdrawals always receive a valid `amount`.
+3. **Error Handling**: The API provides clear error messages and uses appropriate HTTP status codes (400 for invalid input, 200 for successful operations).
+4. **Automatic Account Creation**: If a deposit is made to a non-existent account, it is automatically initialized with a balance of zero before adding the deposit.
 
 ## Challenges Faced
 
-- **Persisting Data:** Since the application runs in-memory, data does not persist between deployments.
-- **Error Handling:** Proper error messages were implemented for invalid operations and incorrect inputs.
-
-## Future Improvements
-
-- **Database Integration:** Using a database like PostgreSQL or SQLite to persist accounts.
-- **Authentication:** Adding authentication to secure accounts.
-- **Transaction History:** Keeping a log of transactions for each account.
+1. **Handling JSON Input Correctly**: Initially, the API was designed to accept amounts as query parameters, but this caused issues with `requests.post()`. Switching to JSON input using a Pydantic model resolved the problem.
+2. **Deploying on Render**: Setting up the `Procfile` and ensuring the correct dependencies in `requirements.txt` was necessary to successfully deploy the API.
 
 This API is currently deployed and accessible at: [ATM API](https://eyals-atm.onrender.com/).
-
