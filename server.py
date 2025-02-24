@@ -5,8 +5,9 @@ app = FastAPI(title="ATM API", description="Basic ATM operations", version="1.0"
 
 # In-memory database
 accounts = {
-    "1234": {"balance": 1000},
-    "5678": {"balance": 500}
+    "account1": {"balance": 1000},
+    "account2": {"balance": 1500},
+    "account3": {"balance": 2000}
 }
 
 class Transaction(BaseModel):
