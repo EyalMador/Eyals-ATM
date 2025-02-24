@@ -16,6 +16,10 @@ class Transaction(BaseModel):
 async def read_root():
     return {"message": "Welcome to the FastAPI application!"}
 
+@app.get("")
+async def read_root():
+    return {"message": "Welcome to the FastAPI application!"}
+
 @app.get("/balance/{account_id}")
 def get_balance(account_id: str):
     """Returns the balance of a given account."""
