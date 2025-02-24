@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 
 app = FastAPI(title="ATM API", description="Basic ATM operations", version="1.0")
 
@@ -21,23 +21,24 @@ def deposit(account_id: int, amount: float):
     """Deposits money into the account."""
     if amount <= 0:
         raise HTTPException(status_code=400, detail="Invalid amount, must be positive")
-    if account_id <= 0:
-        raise HTTPException(status_code=400, detail="Invalid account, must be positive")
-    if account_id in accounts:
-        accounts[account_id] += amount
-        return {"balance": accounts[account_id]}
-    accounts[account_id] = amount
+    
+    if account_id not in accounts:
+        accounts[account_id] = 0  # Initialize the account if it doesn't exist
+    
+    accounts[account_id] += amount
+    return {"balance": accounts[account_id]}
 
 @app.post("/accounts/{account_id}/withdraw")
 def withdraw(account_id: int, amount: float):
     """Withdraws money from the account."""
     if amount <= 0:
         raise HTTPException(status_code=400, detail="Invalid amount, must be positive")
-    if account_id <= 0:
-        raise HTTPException(status_code=400, detail="Invalid account, must be positive")
-    if account_id in accounts:
-        if accounts[account_id] >= amount:
-            accounts[account_id] -= amount
-            return {"balance": accounts[account_id]}
-        raise HTTPException(status_code=400, detail="Insufficient funds")
-    raise HTTPException(status_code=400, detail="Invalid account")
+    
+    if account_id not in accounts:
+        raise HTTPException(status_code=400, detail="Invalid account")
+    
+    if accounts[account_id] >= amount:
+        accounts[account_id] -= amount
+        return {"balance": accounts[account_id]}
+    
+    raise HTTPException(status_code=400, detail="Insufficient funds")
