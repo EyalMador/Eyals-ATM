@@ -1,106 +1,65 @@
 # Eyal's ATM API
 
-## Overview
+Welcome to **Eyal's ATM**, a simple banking service implemented using FastAPI.
 
-Eyal's ATM is a simple ATM API built using FastAPI. It provides basic ATM operations such as checking account balances, depositing, and withdrawing funds. The server uses an in-memory database to store account balances.
+## Base URL
+
+```
+https://eyals-atm.onrender.com/
+```
+
+## Endpoints
+
+### Get Account Balance
+
+- **Endpoint:** `GET /accounts/{account_id}/balance`
+- **Description:** Returns the balance of the specified account.
+- **Response:**
+  - `200 OK`: `{"balance": <current_balance>}`
+  - `400 Bad Request`: `{"detail": "Invalid account"}`
+
+### Deposit Money
+
+- **Endpoint:** `POST /accounts/{account_id}/deposit`
+- **Description:** Deposits money into the account. If the account does not exist, it is initialized.
+- **Request Body:**
+  ```json
+  { "amount": <positive_float> }
+  ```
+- **Response:**
+  - `200 OK`: `{"balance": <updated_balance>}`
+  - `400 Bad Request`: `{"detail": "Invalid amount, must be positive"}`
+
+### Withdraw Money
+
+- **Endpoint:** `POST /accounts/{account_id}/withdraw`
+- **Description:** Withdraws money from the account if sufficient funds exist.
+- **Request Body:**
+  ```json
+  { "amount": <positive_float> }
+  ```
+- **Response:**
+  - `200 OK`: `{"balance": <updated_balance>}`
+  - `400 Bad Request`: `{"detail": "Invalid amount, must be positive"}`
+  - `400 Bad Request`: `{"detail": "Invalid account"}`
+  - `400 Bad Request`: `{"detail": "Insufficient funds"}`
 
 ## Design Decisions
 
-- **Framework**: FastAPI was chosen for its ease of use and automatic generation of interactive API documentation.
-- **Data Storage**: An in-memory dictionary is used to store account balances, allowing for quick access and updates.
-- **Pydantic**: The `Transaction` model is defined using Pydantic to ensure that transaction amounts are validated.
-
-## API Endpoints
-
-### 1. Get Root
-
-- **Endpoint**: `GET /`
-- **Description**: Returns a welcome message.
-- **Response**:
-  ```json
-  {
-    "message": "Welcome to Eyal's ATM!"
-  }
-  ```
-
-### 2. Get Account Balance
-
-- **Endpoint**: `GET /accounts/{account_id}/balance`
-- **Description**: Returns the balance of a given account.
-- **Parameters**:
-  - `account_id`: The ID of the account (integer).
-- **Response**:
-  - **Success**:
-    ```json
-    {
-      "balance": <balance>
-    }
-    ```
-  - **Error** (if account is not found):
-    ```json
-    {
-      "detail": "Invalid account"
-    }
-    ```
-
-### 3. Deposit Money
-
-- **Endpoint**: `POST /accounts/{account_id}/deposit`
-- **Description**: Deposits money into the account.
-- **Parameters**:
-  - `account_id`: The ID of the account (integer).
-  - **Body**: A JSON object containing the amount to deposit.
-    ```json
-    {
-      "amount": <amount>
-    }
-    ```
-- **Response**:
-  - **Success**:
-    ```json
-    {
-      "balance": <new_balance>
-    }
-    ```
-  - **Error** (if amount is invalid):
-    ```json
-    {
-      "detail": "Invalid amount, must be positive"
-    }
-    ```
-
-### 4. Withdraw Money
-
-- **Endpoint**: `POST /accounts/{account_id}/withdraw`
-- **Description**: Withdraws money from the account.
-- **Parameters**:
-  - `account_id`: The ID of the account (integer).
-  - **Body**: A JSON object containing the amount to withdraw.
-    ```json
-    {
-      "amount": <amount>
-    }
-    ```
-- **Response**:
-  - **Success**:
-    ```json
-    {
-      "balance": <new_balance>
-    }
-    ```
-  - **Error** (if account is not found or insufficient funds):
-    ```json
-    {
-      "detail": "Insufficient funds"
-    }
-    ```
+- **In-Memory Storage:** The application uses an in-memory dictionary to store account balances, meaning data resets on each server restart.
+- **Pydantic Validation:** The API enforces correct data input using Pydantic models.
+- **Automatic Account Creation:** Depositing into a nonexistent account initializes it with the deposited amount.
 
 ## Challenges Faced
 
-- **Validation**: Ensuring that amounts and account IDs are valid was a challenge, which was addressed by using FastAPI's built-in validation capabilities.
-- **In-memory Database**: Since the accounts are stored in memory, all data is lost when the server restarts. This is suitable for development but not for production use.
+- **Persisting Data:** Since the application runs in-memory, data does not persist between deployments.
+- **Error Handling:** Proper error messages were implemented for invalid operations and incorrect inputs.
 
-## Conclusion
+## Future Improvements
 
-This ATM API serves as a basic implementation of banking operations and can be extended with more features like persistent storage, user authentication, and transaction history.
+- **Database Integration:** Using a database like PostgreSQL or SQLite to persist accounts.
+- **Authentication:** Adding authentication to secure accounts.
+- **Transaction History:** Keeping a log of transactions for each account.
+
+This API is currently deployed and accessible at: [ATM API](https://eyals-atm.onrender.com/).
 
