@@ -73,27 +73,5 @@ Validation: Ensuring proper validation of inputs was crucial, especially for wit
 
 Concurrency: The current implementation does not handle concurrent access to accounts. In a production environment, care should be taken to manage concurrent modifications safely.
 
-How to Run the Server
-Clone the repository:
-
-bash
-Copy
-Edit
-git clone <repository-url>
-cd <repository-directory>
-Install the required packages:
-
-bash
-Copy
-Edit
-pip install fastapi[all]
-Run the application:
-
-bash
-Copy
-Edit
-uvicorn main:app --reload
-Access the API documentation at http://127.0.0.1:8000/docs.
-
 Conclusion
 The ATM API provides a foundational understanding of building APIs with FastAPI and demonstrates key principles of web development, including RESTful design, data validation, and in-memory storage. Future enhancements could include improved data persistence and concurrency management to support real-world banking scenarios.
