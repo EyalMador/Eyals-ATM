@@ -8,6 +8,8 @@ Welcome to **Eyal's ATM**, a simple banking service implemented using FastAPI.
 https://eyals-atm.onrender.com
 ```
 
+The site may timeout from inactivity. If you recieve a connection error, try again after one minute.
+
 This API is currently deployed and accessible at: [ATM API](https://eyals-atm.onrender.com/).
 
 ## Design Decisions
