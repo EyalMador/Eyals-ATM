@@ -1,43 +1,43 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 
 app = FastAPI(title="ATM API", description="Basic ATM operations", version="1.0")
 
 # In-memory database
-accounts = {
-    "account1": {"balance": 1000},
-    "account2": {"balance": 1500},
-    "account3": {"balance": 2000}
-}
-
-class Transaction(BaseModel):
-    amount: float
+accounts = {}
 
 @app.get("/")
 async def read_root():
-    return {"message": "Welcome to the FastAPI application!"}
+    return {"message": "Welcome to Eyal's ATM!"}
 
 @app.get("/accounts/{account_id}/balance")
-def get_balance(account_id: str):
+def get_balance(account_id: int):
     """Returns the balance of a given account."""
     if account_id in accounts:
-        return {"balance": accounts[account_id]["balance"]}
+        return {"balance": accounts[account_id]}
     raise HTTPException(status_code=400, detail="Invalid account")
 
 @app.post("/accounts/{account_id}/deposit")
-def deposit(account_id: str, transaction: Transaction):
+def deposit(account_id: int, amount: float):
     """Deposits money into the account."""
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Invalid amount, must be positive")
+    if account_id <= 0:
+        raise HTTPException(status_code=400, detail="Invalid account, must be positive")
     if account_id in accounts:
-        accounts[account_id]["balance"] += transaction.amount
-        return {"balance": accounts[account_id]["balance"]}
-    raise HTTPException(status_code=400, detail="Account not found")
+        accounts[account_id] += amount
+        return {"balance": accounts[account_id]}
+    accounts[account_id] = amount
 
 @app.post("/accounts/{account_id}/withdraw")
-def withdraw(account_id: str, transaction: Transaction):
+def withdraw(account_id: int, amount: float):
     """Withdraws money from the account."""
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Invalid amount, must be positive")
+    if account_id <= 0:
+        raise HTTPException(status_code=400, detail="Invalid account, must be positive")
     if account_id in accounts:
-        if accounts[account_id]["balance"] >= transaction.amount:
-            accounts[account_id]["balance"] -= transaction.amount
-            return {"balance": accounts[account_id]["balance"]}
+        if accounts[account_id] >= amount:
+            accounts[account_id] -= amount
+            return {"balance": accounts[account_id]}
         raise HTTPException(status_code=400, detail="Insufficient funds")
     raise HTTPException(status_code=400, detail="Invalid account")
