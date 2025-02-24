@@ -1,8 +1,8 @@
-# ATM API
+# Eyal's ATM API
 
 ## Overview
 
-This is a simple ATM API built using FastAPI. It provides basic ATM operations such as checking account balances, depositing, and withdrawing funds. The server uses an in-memory database to store account balances.
+Eyal's ATM is a simple ATM API built using FastAPI. It provides basic ATM operations such as checking account balances, depositing, and withdrawing funds. The server uses an in-memory database to store account balances.
 
 ## Design Decisions
 
